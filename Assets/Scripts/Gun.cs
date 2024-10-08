@@ -25,6 +25,10 @@ public class Gun : MonoBehaviour
     [SerializeField] private AudioClip shotEmptyAudioClip;
     [SerializeField] private AudioClip barrelOutAudioClip;
 
+    [SerializeField] private Rigidbody[] bulletsRigidbodies;
+
+
+
     private enum CurrentController { None, Left, Right }
     private CurrentController currentController;
 
@@ -33,6 +37,8 @@ public class Gun : MonoBehaviour
 
     private const int MAX_SHOTS = 6;
     private int shotsLeft = MAX_SHOTS;
+
+    private bool isHammerArmed;
 
 
     private void Start()
@@ -72,14 +78,55 @@ public class Gun : MonoBehaviour
         }
     }
 
+    private IEnumerator BulletsExpulsionCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+
+        bool areBulletsOut = false;
+
+        while (!areBulletsOut && isBarrelOut && currentController != CurrentController.None)
+        {
+            yield return null;
+
+            Vector3 bulletsCurrentForward = bulletsRigidbodies[0].transform.forward;
+            float verticalDot = Vector3.Dot(bulletsCurrentForward, Vector3.down);
+
+            float dotThreshold = 0.8f;
+            if (verticalDot > dotThreshold)
+            {
+                areBulletsOut = true;
+                //Debug.Log("Empty bullets expulsed from gun");
+
+                foreach (Rigidbody rb in bulletsRigidbodies)
+                {
+                    rb.isKinematic = false;
+                    rb.gameObject.transform.parent = null;
+                    rb.gameObject.GetComponentInChildren<CapsuleCollider>().enabled = true;
+
+                    float expulsionForce = 1f;
+                    rb.AddForce(bulletsCurrentForward * expulsionForce, ForceMode.Impulse);
+                }
+            }
+        }
+    }
+
 
     private void ActivateAction_Performed(InputAction.CallbackContext obj)
     {
-        float triggerValue = obj.ReadValue<float>();
+        if (!isHammerArmed) return;
 
+        float triggerValue = obj.ReadValue<float>();
         animator.SetFloat("Trigger_Pressure", triggerValue);
         TryShoot(triggerValue);
     }
+
+
+    private void ActivateAction_Canceled(InputAction.CallbackContext obj)
+    {
+        shotDone = false;
+        animator.SetFloat("Trigger_Pressure", 0f);  // reset trigger to idle position
+    }
+
 
     private void TryShoot(float triggerValue)
     {
@@ -104,19 +151,14 @@ public class Gun : MonoBehaviour
         audioSource.clip = shotsLeft > 0 ? shotAudioClip : shotEmptyAudioClip;
         audioSource.Play();
 
-        if (animator.enabled)
-        {
-            animator.SetTrigger("Rotate_Barrel");
-        }
+        // if (animator.enabled)
+        // {
+        //     animator.SetTrigger("Rotate_Barrel");
+        // }
 
         shotDone = true;
     }
 
-    private void ActivateAction_Canceled(InputAction.CallbackContext obj)
-    {
-        shotDone = false;
-        animator.SetFloat("Trigger_Pressure", 0f);  // reset trigger to idle position
-    }
 
     private void PrimaryAction_Started(InputAction.CallbackContext obj) // ejecting barrel for reloading
     {
@@ -131,6 +173,7 @@ public class Gun : MonoBehaviour
         audioSource.Play();
 
         StartCoroutine(BarrelOutCoroutine());
+        StartCoroutine(BulletsExpulsionCoroutine());
     }
 
     private void XRGrabInteractable_SelectEntered(SelectEnterEventArgs args)
