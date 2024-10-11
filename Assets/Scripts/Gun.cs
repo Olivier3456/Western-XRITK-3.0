@@ -29,7 +29,12 @@ public class Gun : MonoBehaviour
 
     [SerializeField] private GunHammerJoint gunHammerJoint;
 
+    [SerializeField] private Transform barrelRotationTransform;
+    [SerializeField] private AnimationCurve barrelRotationSpeedCurve;
+
     public event EventHandler OnShoot;
+
+
 
 
 
@@ -88,6 +93,29 @@ public class Gun : MonoBehaviour
                 isBarrelOut = false;
             }
         }
+    }
+
+    private IEnumerator RotateBarrelAfterShootCoroutine()
+    {
+        Quaternion startRotation = barrelRotationTransform.localRotation;
+
+        float rotationStep = 60f;
+        float targetRotation = startRotation.eulerAngles.z + rotationStep;
+
+        Quaternion endRotation = Quaternion.Euler(0, 0, targetRotation);
+
+        float progress = 0f;
+        float duration = 0.3f;
+
+        while (progress < 1)
+        {
+            float slerpCurveValue = barrelRotationSpeedCurve.Evaluate(progress);
+            barrelRotationTransform.localRotation = Quaternion.Slerp(startRotation, endRotation, slerpCurveValue);
+            progress += Time.deltaTime / duration;
+            yield return null;
+        }
+
+        barrelRotationTransform.localRotation = endRotation;
     }
 
     private IEnumerator BulletsExpulsionCoroutine()
@@ -163,10 +191,8 @@ public class Gun : MonoBehaviour
         audioSource.clip = shotsLeft > 0 ? shotAudioClip : shotEmptyAudioClip;
         audioSource.Play();
 
-        if (animator.enabled)
-        {
-            animator.SetTrigger("Rotate_Barrel");
-        }
+        StartCoroutine(RotateBarrelAfterShootCoroutine());
+
         isHammerArmed = false;
         shotDone = true;
         OnShoot?.Invoke(this, EventArgs.Empty);

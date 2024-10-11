@@ -2831,6 +2831,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6068f0d0298633f4d97cd682123592b9, type: 3}
+--- !u!4 &100932892 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6971832266623462723, guid: e325dfdca110beb47a0a67feb5a83ff9,
+    type: 3}
+  m_PrefabInstance: {fileID: 7613618548942011764}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &103320165
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -77162,6 +77168,16 @@ PrefabInstance:
       objectReference: {fileID: 348845610}
     - target: {fileID: 4209752726548722187, guid: e325dfdca110beb47a0a67feb5a83ff9,
         type: 3}
+      propertyPath: barrelRotation
+      value: 
+      objectReference: {fileID: 100932892}
+    - target: {fileID: 4209752726548722187, guid: e325dfdca110beb47a0a67feb5a83ff9,
+        type: 3}
+      propertyPath: barrelRotationTransform
+      value: 
+      objectReference: {fileID: 100932892}
+    - target: {fileID: 4209752726548722187, guid: e325dfdca110beb47a0a67feb5a83ff9,
+        type: 3}
       propertyPath: leftInteractorTransform
       value: 
       objectReference: {fileID: 1103206363}
@@ -77170,6 +77186,31 @@ PrefabInstance:
       propertyPath: rightInteractorTransform
       value: 
       objectReference: {fileID: 1599013805}
+    - target: {fileID: 4209752726548722187, guid: e325dfdca110beb47a0a67feb5a83ff9,
+        type: 3}
+      propertyPath: barrelRotationSpeedCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4209752726548722187, guid: e325dfdca110beb47a0a67feb5a83ff9,
+        type: 3}
+      propertyPath: barrelRotationSpeedCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4209752726548722187, guid: e325dfdca110beb47a0a67feb5a83ff9,
+        type: 3}
+      propertyPath: barrelRotationSpeedCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4209752726548722187, guid: e325dfdca110beb47a0a67feb5a83ff9,
+        type: 3}
+      propertyPath: barrelRotationSpeedCurve.m_Curve.Array.data[1].inSlope
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4209752726548722187, guid: e325dfdca110beb47a0a67feb5a83ff9,
+        type: 3}
+      propertyPath: barrelRotationSpeedCurve.m_Curve.Array.data[1].outSlope
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7515526275964255220, guid: e325dfdca110beb47a0a67feb5a83ff9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -77223,12 +77264,12 @@ PrefabInstance:
     - target: {fileID: 7702743907079677727, guid: e325dfdca110beb47a0a67feb5a83ff9,
         type: 3}
       propertyPath: m_Name
-      value: Revolver Hammer Hinge Joint
+      value: Revolver With Hinge Joint Hammer
       objectReference: {fileID: 0}
     - target: {fileID: 8703054419394332787, guid: e325dfdca110beb47a0a67feb5a83ff9,
         type: 3}
       propertyPath: m_Name
-      value: SM_Wep_Revolver_01_Barrel
+      value: Barrel (Rotation)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
