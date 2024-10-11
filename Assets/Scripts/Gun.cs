@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -25,12 +26,12 @@ public class Gun : MonoBehaviour
     [SerializeField] private AudioClip shotEmptyAudioClip;
     [SerializeField] private AudioClip barrelOutAudioClip;
 
-    [SerializeField] private Rigidbody[] bulletsRigidbodies;
-
     [SerializeField] private GunHammerJoint gunHammerJoint;
 
     [SerializeField] private Transform barrelRotationTransform;
     [SerializeField] private AnimationCurve barrelRotationSpeedCurve;
+
+    [SerializeField] private GunBulletChamber[] gunBulletChambers;
 
     public event EventHandler OnShoot;
 
@@ -45,10 +46,10 @@ public class Gun : MonoBehaviour
     private bool shotDoneButNotFinished;
     private bool isBarrelOut;
 
-    private const int MAX_SHOTS = 6;
-    private int shotsLeft = MAX_SHOTS;
 
     private bool isHammerArmed;
+
+    private int bulletChamberFacingCanon = 0;
 
 
     private void Start()
@@ -129,21 +130,17 @@ public class Gun : MonoBehaviour
         {
             yield return null;
 
-            Vector3 bulletsCurrentForward = bulletsRigidbodies[0].transform.forward;
-            float verticalDot = Vector3.Dot(bulletsCurrentForward, Vector3.down);
+            Vector3 gunCurrentForward = transform.forward; // =====================> A VERIFIER
+            float verticalDot = Vector3.Dot(gunCurrentForward, Vector3.up);
 
             float dotThreshold = 0.8f;
             if (verticalDot > dotThreshold) // the revolver is facing up
             {
                 areBulletsOut = true;
 
-                foreach (Rigidbody rb in bulletsRigidbodies)
+                foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
                 {
-                    rb.isKinematic = false;
-                    rb.gameObject.transform.parent = null;
-
-                    float expulsionForce = 1f;
-                    rb.AddForce(bulletsCurrentForward * expulsionForce, ForceMode.Impulse);
+                    gunBulletChamber.GunBullet?.ExpulsionFromGunBarrel(gunCurrentForward);
                 }
             }
         }
@@ -186,21 +183,36 @@ public class Gun : MonoBehaviour
             HapticsUtility.SendHapticImpulse(1, 0.1f, HapticsUtility.Controller.Right);
         }
 
-        shotsLeft = Math.Max(--shotsLeft, 0);
+        Debug.Log("Shot is going to be fired. Bullet hole facing canon: " + bulletChamberFacingCanon);
 
-        audioSource.clip = shotsLeft > 0 ? shotAudioClip : shotEmptyAudioClip;
-        audioSource.Play();
+        bool isValidBullet = gunBulletChambers[bulletChamberFacingCanon].GunBullet != null && !gunBulletChambers[bulletChamberFacingCanon].GunBullet.HasBeenShot;
 
-        StartCoroutine(RotateBarrelAfterShootCoroutine());
 
-        if (shotsLeft > 0)
-        {           
+        if (isValidBullet)
+        {
+            gunBulletChambers[bulletChamberFacingCanon].GunBullet.Shoot();
             float shotAnimSpeed = 2.5f;
             animator.SetFloat("ShotAnimSpeed", shotAnimSpeed);
             animator.SetTrigger("Shoot");
             float shotCooldown = 1 / shotAnimSpeed;
             StartCoroutine(ShotDelayCoroutine(shotCooldown));
         }
+
+
+        if (bulletChamberFacingCanon < 5)
+        {
+            bulletChamberFacingCanon++;
+        }
+        else
+        {
+            bulletChamberFacingCanon = 0;
+        }
+
+
+        audioSource.clip = isValidBullet ? shotAudioClip : shotEmptyAudioClip;
+        audioSource.Play();
+
+        StartCoroutine(RotateBarrelAfterShootCoroutine());
 
         isHammerArmed = false;
         shotDone = true;
