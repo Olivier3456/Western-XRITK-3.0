@@ -27,6 +27,10 @@ public class Gun : MonoBehaviour
 
     [SerializeField] private Rigidbody[] bulletsRigidbodies;
 
+    [SerializeField] private GunHammerJoint gunHammerJoint;
+
+    public event EventHandler OnShoot;
+
 
 
     private enum CurrentController { None, Left, Right }
@@ -45,6 +49,14 @@ public class Gun : MonoBehaviour
     {
         xRGrabInteractable.selectEntered.AddListener(XRGrabInteractable_SelectEntered);
         xRGrabInteractable.selectExited.AddListener(XRGrabInteractable_SelectExited);
+
+        gunHammerJoint.OnMinRotationReached += GunHammerJoint_OnMinRotationReached;
+    }
+
+
+    private void GunHammerJoint_OnMinRotationReached(object obj, EventArgs args)
+    {
+        isHammerArmed = true;
     }
 
 
@@ -54,7 +66,7 @@ public class Gun : MonoBehaviour
         float zAngleToAutorizeBarrelLock = 35f;
         bool canBarrelBeLocked = false;
 
-        while (isBarrelOut && currentController != CurrentController.None)
+        while (isBarrelOut)
         {
             yield return null;
 
@@ -84,7 +96,7 @@ public class Gun : MonoBehaviour
 
         bool areBulletsOut = false;
 
-        while (!areBulletsOut && isBarrelOut && currentController != CurrentController.None)
+        while (!areBulletsOut && isBarrelOut)
         {
             yield return null;
 
@@ -92,7 +104,7 @@ public class Gun : MonoBehaviour
             float verticalDot = Vector3.Dot(bulletsCurrentForward, Vector3.down);
 
             float dotThreshold = 0.8f;
-            if (verticalDot > dotThreshold)
+            if (verticalDot > dotThreshold) // the revolver is facing up
             {
                 areBulletsOut = true;
                 //Debug.Log("Empty bullets expulsed from gun");
@@ -101,7 +113,7 @@ public class Gun : MonoBehaviour
                 {
                     rb.isKinematic = false;
                     rb.gameObject.transform.parent = null;
-                    rb.gameObject.GetComponentInChildren<CapsuleCollider>().enabled = true;
+                    //rb.gameObject.GetComponentInChildren<CapsuleCollider>().enabled = true;
 
                     float expulsionForce = 1f;
                     rb.AddForce(bulletsCurrentForward * expulsionForce, ForceMode.Impulse);
@@ -151,12 +163,13 @@ public class Gun : MonoBehaviour
         audioSource.clip = shotsLeft > 0 ? shotAudioClip : shotEmptyAudioClip;
         audioSource.Play();
 
-        // if (animator.enabled)
-        // {
-        //     animator.SetTrigger("Rotate_Barrel");
-        // }
-
+        if (animator.enabled)
+        {
+            animator.SetTrigger("Rotate_Barrel");
+        }
+        isHammerArmed = false;
         shotDone = true;
+        OnShoot?.Invoke(this, EventArgs.Empty);
     }
 
 
@@ -185,7 +198,7 @@ public class Gun : MonoBehaviour
             leftActivateAction.action.performed += ActivateAction_Performed;
             leftActivateAction.action.canceled += ActivateAction_Canceled;
 
-            leftPrimaryAction.action.started += PrimaryAction_Started;
+            leftPrimaryAction.action.started += PrimaryAction_Started;  // barrel ejection (reloading)
         }
         else
         {
@@ -194,7 +207,7 @@ public class Gun : MonoBehaviour
             rightActivateAction.action.performed += ActivateAction_Performed;
             rightActivateAction.action.canceled += ActivateAction_Canceled;
 
-            rightPrimaryAction.action.started += PrimaryAction_Started;
+            rightPrimaryAction.action.started += PrimaryAction_Started;  // barrel ejection (reloading)
         }
     }
 
