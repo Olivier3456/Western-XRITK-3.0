@@ -42,6 +42,7 @@ public class Gun : MonoBehaviour
     private CurrentController currentController;
 
     private bool shotDone;
+    private bool shotDoneButNotFinished;
     private bool isBarrelOut;
 
     private const int MAX_SHOTS = 6;
@@ -135,13 +136,11 @@ public class Gun : MonoBehaviour
             if (verticalDot > dotThreshold) // the revolver is facing up
             {
                 areBulletsOut = true;
-                //Debug.Log("Empty bullets expulsed from gun");
 
                 foreach (Rigidbody rb in bulletsRigidbodies)
                 {
                     rb.isKinematic = false;
                     rb.gameObject.transform.parent = null;
-                    //rb.gameObject.GetComponentInChildren<CapsuleCollider>().enabled = true;
 
                     float expulsionForce = 1f;
                     rb.AddForce(bulletsCurrentForward * expulsionForce, ForceMode.Impulse);
@@ -151,7 +150,7 @@ public class Gun : MonoBehaviour
     }
 
 
-    private void ActivateAction_Performed(InputAction.CallbackContext obj)
+    private void ActivateAction_Performed(InputAction.CallbackContext obj) // pressure on gun trigger with controller trigger
     {
         if (!isHammerArmed) return;
 
@@ -161,10 +160,10 @@ public class Gun : MonoBehaviour
     }
 
 
-    private void ActivateAction_Canceled(InputAction.CallbackContext obj)
+    private void ActivateAction_Canceled(InputAction.CallbackContext obj) // reset gun trigger to idle position when controller trigger is not pressed anymore
     {
         shotDone = false;
-        animator.SetFloat("Trigger_Pressure", 0f);  // reset trigger to idle position
+        animator.SetFloat("Trigger_Pressure", 0f);
     }
 
 
@@ -172,6 +171,7 @@ public class Gun : MonoBehaviour
     {
         if (isBarrelOut) return;
         if (shotDone) return;
+        if (shotDoneButNotFinished) return;    // there is a small cooldown after a shot
 
 
         float shotThreshold = 0.9f;
@@ -193,15 +193,37 @@ public class Gun : MonoBehaviour
 
         StartCoroutine(RotateBarrelAfterShootCoroutine());
 
+        if (shotsLeft > 0)
+        {           
+            float shotAnimSpeed = 2.5f;
+            animator.SetFloat("ShotAnimSpeed", shotAnimSpeed);
+            animator.SetTrigger("Shoot");
+            float shotCooldown = 1 / shotAnimSpeed;
+            StartCoroutine(ShotDelayCoroutine(shotCooldown));
+        }
+
         isHammerArmed = false;
         shotDone = true;
         OnShoot?.Invoke(this, EventArgs.Empty);
+    }
+
+    private IEnumerator ShotDelayCoroutine(float shotCooldown)
+    {
+        shotDoneButNotFinished = true;
+        float time = 0f;
+        while (time < shotCooldown)
+        {
+            yield return null;
+            time += Time.deltaTime;
+        }
+        shotDoneButNotFinished = false;
     }
 
 
     private void PrimaryAction_Started(InputAction.CallbackContext obj) // ejecting barrel for reloading
     {
         if (isBarrelOut) return;
+        if (shotDoneButNotFinished) return;
 
         isBarrelOut = true;
 
