@@ -58,6 +58,10 @@ public class Gun : MonoBehaviour
         xRGrabInteractable.selectExited.AddListener(XRGrabInteractable_SelectExited);
 
         gunHammerJoint.OnMinRotationReached += GunHammerJoint_OnMinRotationReached;
+
+        DisableBulletsGrabbable(); // Should we wait one frame to disable grab interactable of bullets in the sockets interactors at start ? TO DO: Test
+        bool onlyEmptyOnes = true;
+        DisableGunBulletChambersSocketInteractors(onlyEmptyOnes);
     }
 
 
@@ -72,6 +76,18 @@ public class Gun : MonoBehaviour
         float zAngleMinToLockBarrel = 0.05f;
         float zAngleToAutorizeBarrelLock = 35f;
         bool canBarrelBeLocked = false;
+
+        isBarrelOut = true;
+
+        barrelRigidbody.isKinematic = false;
+
+        animator.enabled = false;
+
+        audioSource.clip = barrelOutAudioClip;
+        audioSource.Play();
+
+        EnableBulletsGrabbable(); // bullets CAN be grabbed by player when the barrel is unlocked
+        EnableGunBulletChambersSocketInteractors(); // bullet can be put in gun barrel chambers when the barrel is locked
 
         while (isBarrelOut)
         {
@@ -93,6 +109,79 @@ public class Gun : MonoBehaviour
                 animator.enabled = true;
 
                 isBarrelOut = false;
+
+                DisableBulletsGrabbable(); // bullets CAN'T be grabbed by player when the barrel is locked
+                bool onlyEmptyOnes = true;
+                DisableGunBulletChambersSocketInteractors(onlyEmptyOnes); // bullets can't be put in gun barrel chambers when the barrel is locked, but socket interactors with bullets in it stay active
+            }
+        }
+    }
+
+    private void EnableBulletsGrabbable()
+    {
+        foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
+        {
+            if (gunBulletChamber.GunBullet != null)
+            {
+                gunBulletChamber.GunBullet.EnableCollider();
+            }
+        }
+    }
+
+    private void DisableBulletsGrabbable()
+    {
+        foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
+        {
+            if (gunBulletChamber.GunBullet != null)
+            {
+                gunBulletChamber.GunBullet.DisableCollider();
+            }
+        }
+    }
+
+    private void EnableGunBulletChambersSocketInteractors()
+    {
+        foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
+        {
+            gunBulletChamber.EnableSocketInteractor();
+        }
+    }
+
+    private void DisableGunBulletChambersSocketInteractors(bool onlyEmptyOnes)
+    {
+        foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
+        {
+            gunBulletChamber.DisableSocketInteractor(onlyEmptyOnes);
+        }
+    }
+
+
+    private IEnumerator BulletsExpulsionCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+
+        bool areBulletsOut = false;
+
+        while (!areBulletsOut && isBarrelOut)
+        {
+            yield return null;
+
+            Vector3 gunCurrentForward = transform.forward;
+            float verticalDot = Vector3.Dot(gunCurrentForward, Vector3.up);
+
+            float dotThreshold = 0.8f;
+            if (verticalDot > dotThreshold) // the revolver is facing up
+            {
+                areBulletsOut = true;
+
+                foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
+                {
+                    gunBulletChamber.GunBullet?.ExpulsionFromGunBarrel(gunCurrentForward);
+                    //gunBulletChamber.GunBullet?.EnableCollider();
+                }
+
+                DisableGunBulletChambersSocketInteractors(false);   // disable all bullet chambers socket interactors, to allow bullets to fall
+                Invoke(nameof(EnableGunBulletChambersSocketInteractors), 1f); // ...and re-enable it after a short time
             }
         }
     }
@@ -120,32 +209,6 @@ public class Gun : MonoBehaviour
         barrelRotationTransform.localRotation = endRotation;
     }
 
-    private IEnumerator BulletsExpulsionCoroutine()
-    {
-        yield return new WaitForSeconds(1f);
-
-        bool areBulletsOut = false;
-
-        while (!areBulletsOut && isBarrelOut)
-        {
-            yield return null;
-
-            Vector3 gunCurrentForward = transform.forward; // =====================> A VERIFIER
-            float verticalDot = Vector3.Dot(gunCurrentForward, Vector3.up);
-
-            float dotThreshold = 0.8f;
-            if (verticalDot > dotThreshold) // the revolver is facing up
-            {
-                areBulletsOut = true;
-
-                foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
-                {
-                    gunBulletChamber.GunBullet?.ExpulsionFromGunBarrel(gunCurrentForward);
-                }
-            }
-        }
-    }
-
 
     private void ActivateAction_Performed(InputAction.CallbackContext obj) // pressure on gun trigger with controller trigger
     {
@@ -168,7 +231,7 @@ public class Gun : MonoBehaviour
     {
         if (isBarrelOut) return;
         if (shotDone) return;
-        if (shotDoneButNotFinished) return;    // there is a small cooldown after a shot
+        if (shotDoneButNotFinished) return;    // there is a small cooldown after a shot (see ShotDelayCoroutine())
 
 
         float shotThreshold = 0.9f;
@@ -236,14 +299,6 @@ public class Gun : MonoBehaviour
     {
         if (isBarrelOut) return;
         if (shotDoneButNotFinished) return;
-
-        isBarrelOut = true;
-
-        barrelRigidbody.isKinematic = false;
-        animator.enabled = false;
-
-        audioSource.clip = barrelOutAudioClip;
-        audioSource.Play();
 
         StartCoroutine(BarrelOutCoroutine());
         StartCoroutine(BulletsExpulsionCoroutine());

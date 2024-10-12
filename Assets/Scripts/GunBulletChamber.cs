@@ -1,16 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class GunBulletChamber : MonoBehaviour
 {
     private XRSocketInteractor xRSocketInteractor;
-    
-    // public XRSocketInteractor XRSocketInteractor
-    // {
-    //     get => xRSocketInteractor;
-    // }
 
     public bool hasSelection => xRSocketInteractor.hasSelection;
 
@@ -32,6 +25,23 @@ public class GunBulletChamber : MonoBehaviour
     {
         xRSocketInteractor = GetComponent<XRSocketInteractor>();
     }
+
+    public void EnableSocketInteractor()
+    {
+        xRSocketInteractor.socketActive = true;
+    }
+
+    public void DisableSocketInteractor(bool onlyIfEmpty)
+    {
+        if (!onlyIfEmpty)
+        {
+            xRSocketInteractor.socketActive = false;
+            return;
+        }
+
+        if (!xRSocketInteractor.hasSelection)
+        {
+            xRSocketInteractor.socketActive = false;
+        }
+    }
 }
-
-

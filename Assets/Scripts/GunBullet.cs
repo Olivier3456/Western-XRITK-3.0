@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class GunBullet : MonoBehaviour
@@ -7,6 +8,7 @@ public class GunBullet : MonoBehaviour
     public bool HasBeenShot => hasBeenShot;
 
     [SerializeField] private GameObject bulletProjectile;
+    [SerializeField] private Collider bulletCollider;
 
     private Rigidbody rb;
 
@@ -18,20 +20,9 @@ public class GunBullet : MonoBehaviour
         xrGrabInteractable = GetComponent<XRGrabInteractable>();
     }
 
-    // public Rigidbody Rigidbody
-    // {
-    //     get => rb;
-    // }
-
-    // public XRGrabInteractable XRGrabInteractable
-    // {
-    //     get => xrGrabInteractable;
-    // }
 
     public void ExpulsionFromGunBarrel(Vector3 gunCurrentForward)
     {
-        xrGrabInteractable.enabled = false;
-
         rb.isKinematic = false;
 
         float expulsionForce = 1f;
@@ -42,5 +33,17 @@ public class GunBullet : MonoBehaviour
     {
         hasBeenShot = true;
         bulletProjectile.SetActive(false);
+    }
+
+    public void EnableCollider()
+    {
+        bulletCollider.enabled = true;
+        //xrGrabInteractable.interactionLayers = startInteractionLayerMask;
+    }
+
+    public void DisableCollider()
+    {
+        bulletCollider.enabled = false;  // for now, idk how to disable "grabbable" propertie in XRGrabInteractable without making the bullet falling out of its socket interactor
+        //xrGrabInteractable.interactionLayers = interactionLayerMask_NoInteractions;
     }
 }

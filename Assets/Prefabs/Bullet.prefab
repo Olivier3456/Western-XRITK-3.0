@@ -366,6 +366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletProjectile: {fileID: 1427725825653209500}
+  bulletCollider: {fileID: 7667718684458187207}
 --- !u!1 &5428754203063216258
 GameObject:
   m_ObjectHideFlags: 0
