@@ -43,7 +43,7 @@ public class GunBullet : MonoBehaviour
 
     public void DisableCollider()
     {
-        bulletCollider.enabled = false;  // for now, idk how to disable "grabbable" propertie in XRGrabInteractable without making the bullet falling out of its socket interactor
+        bulletCollider.enabled = false;  // for now, idk how to disable "grabbable" property in XRGrabInteractable without making the bullet falling out of its socket interactor
         //xrGrabInteractable.interactionLayers = interactionLayerMask_NoInteractions;
     }
 }

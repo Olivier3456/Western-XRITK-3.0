@@ -3326,6 +3326,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Y Button",
+                    "type": "Button",
+                    "id": "fb2cbb43-a3bc-4d91-a288-7ae95b807ae2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -3337,6 +3346,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "X Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c9f9f8dd-6704-4ab6-896a-eac548155c6a",
+                    "path": "<XRController>{LeftHand}/secondaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Y Button",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

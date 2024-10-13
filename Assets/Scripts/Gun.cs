@@ -32,10 +32,12 @@ public class Gun : MonoBehaviour
     [SerializeField] private AnimationCurve barrelRotationSpeedCurve;
 
     [SerializeField] private GunBulletChamber[] gunBulletChambers;
+    [SerializeField] private Collider hammerCollider;
 
     public event EventHandler OnShoot;
 
-
+    public event EventHandler OnGunGrabbed;
+    public event EventHandler OnGunDropped;
 
 
 
@@ -324,6 +326,10 @@ public class Gun : MonoBehaviour
 
             rightPrimaryAction.action.started += PrimaryAction_Started;  // barrel ejection (reloading)
         }
+
+        hammerCollider.enabled = true;
+
+        OnGunGrabbed?.Invoke(this, EventArgs.Empty);
     }
 
     private void XRGrabInteractable_SelectExited(SelectExitEventArgs args)
@@ -344,5 +350,9 @@ public class Gun : MonoBehaviour
         }
 
         currentController = CurrentController.None;
+
+        hammerCollider.enabled = false;
+
+        OnGunDropped?.Invoke(this, EventArgs.Empty);
     }
 }
