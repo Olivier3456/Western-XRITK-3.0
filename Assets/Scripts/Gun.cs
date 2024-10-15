@@ -32,7 +32,10 @@ public class Gun : MonoBehaviour
     [SerializeField] private AnimationCurve barrelRotationSpeedCurve;
 
     [SerializeField] private GunBulletChamber[] gunBulletChambers;
+
     [SerializeField] private Collider hammerCollider;
+
+    [SerializeField] private GunBarrel gunBarrel;
 
     public event EventHandler OnShoot;
 
@@ -62,8 +65,6 @@ public class Gun : MonoBehaviour
         gunHammerJoint.OnMinRotationReached += GunHammerJoint_OnMinRotationReached;
 
         DisableBulletsGrabbable(); // Should we wait one frame to disable grab interactable of bullets in the sockets interactors at start ? TO DO: Test
-        bool onlyEmptyOnes = true;
-        DisableGunBulletChambersSocketInteractors(onlyEmptyOnes);
     }
 
 
@@ -89,7 +90,7 @@ public class Gun : MonoBehaviour
         audioSource.Play();
 
         EnableBulletsGrabbable(); // bullets CAN be grabbed by player when the barrel is unlocked
-        EnableGunBulletChambersSocketInteractors(); // bullet can be put in gun barrel chambers when the barrel is locked
+        //EnableGunBulletChambersSocketInteractors(); // bullet can be put in gun barrel chambers when the barrel is locked
 
         while (isBarrelOut)
         {
@@ -112,9 +113,11 @@ public class Gun : MonoBehaviour
 
                 isBarrelOut = false;
 
+                gunBarrel.DisableBarrelBulletDetectionCollider();
+
                 //DisableBulletsGrabbable(); // bullets CAN'T be grabbed by player when the barrel is locked - No need here anymore: it is already disabled by GunBarrel when a bullet arrives to its chamber.
-                bool onlyEmptyOnes = true;
-                DisableGunBulletChambersSocketInteractors(onlyEmptyOnes); // bullets can't be put in gun barrel chambers when the barrel is locked, but socket interactors with bullets in it stay active
+                //bool onlyEmptyOnes = true;
+                //DisableGunBulletChambersSocketInteractors(onlyEmptyOnes); // bullets can't be put in gun barrel chambers when the barrel is locked, but socket interactors with bullets in it stay active
             }
         }
     }
@@ -141,23 +144,7 @@ public class Gun : MonoBehaviour
         }
     }
 
-    private void EnableGunBulletChambersSocketInteractors()
-    {
-        //foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
-        //{
-        //    gunBulletChamber.EnableSocketInteractor();
-        //}
-    }
-
-    private void DisableGunBulletChambersSocketInteractors(bool onlyEmptyOnes)
-    {
-        //foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
-        //{
-        //    gunBulletChamber.DisableSocketInteractor(onlyEmptyOnes);
-        //}
-    }
-
-
+    
     private IEnumerator BulletsExpulsionCoroutine()
     {
         yield return new WaitForSeconds(1f);
@@ -179,11 +166,8 @@ public class Gun : MonoBehaviour
                 foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
                 {
                     gunBulletChamber.GunBullet?.ExpulsionFromGunBarrel(gunCurrentForward);
-                    //gunBulletChamber.GunBullet?.EnableCollider();
-                }
-
-                DisableGunBulletChambersSocketInteractors(false);   // disable all bullet chambers socket interactors, to allow bullets to fall
-                Invoke(nameof(EnableGunBulletChambersSocketInteractors), 1f); // ...and re-enable it after a short time
+                    gunBulletChamber.RemoveBullet();
+                }                
             }
         }
     }

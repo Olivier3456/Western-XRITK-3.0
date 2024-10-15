@@ -14,6 +14,8 @@ public class GunBullet : MonoBehaviour
 
     private XRGrabInteractable xrGrabInteractable;
 
+    public bool isInGun = false;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -24,6 +26,7 @@ public class GunBullet : MonoBehaviour
     public void ExpulsionFromGunBarrel(Vector3 gunCurrentForward)
     {
         rb.isKinematic = false;
+        isInGun = false;
 
         float expulsionForce = 1f;
         rb.AddForce(-gunCurrentForward * expulsionForce, ForceMode.Impulse);
@@ -38,13 +41,11 @@ public class GunBullet : MonoBehaviour
     public void EnableCollider()
     {
         bulletCollider.enabled = true;
-        //xrGrabInteractable.interactionLayers = startInteractionLayerMask;
     }
 
     public void DisableCollider()
     {
         bulletCollider.enabled = false;  // for now, idk how to disable "grabbable" property in XRGrabInteractable without making the bullet falling out of its socket interactor
-        //xrGrabInteractable.interactionLayers = interactionLayerMask_NoInteractions;
     }
 
     public void SetRigidbodyKinematic(bool isKinematic)

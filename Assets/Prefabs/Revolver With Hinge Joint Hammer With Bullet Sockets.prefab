@@ -1109,6 +1109,7 @@ MonoBehaviour:
   - {fileID: 2401463108434992235}
   - {fileID: 8225443315578089482}
   hammerCollider: {fileID: 1001907040167982294}
+  gunBarrel: {fileID: 5532291177973183901}
 --- !u!82 &7788812153962959116
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1314,6 +1315,7 @@ MonoBehaviour:
   bulletSnapMoveSpeed: 0.15
   bulletSnapRotationSpeed: 5
   validChamberVisualDebugObject: {fileID: 8122139620285668733}
+  bulletsDetectionTriggerCollider: {fileID: 666188572561249674}
 --- !u!1 &8122139620285668733
 GameObject:
   m_ObjectHideFlags: 0

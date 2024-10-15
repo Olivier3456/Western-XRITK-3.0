@@ -18,11 +18,12 @@ public class GunBulletChamber : MonoBehaviour
         }
 
         this.gunBullet = gunBullet;
+        this.gunBullet.isInGun = true;
 
         Debug.Log("Gun Bullet Chamber: bullet addded.");
     }
 
-    public void RemoveBullet(GunBullet gunBullet)
+    public void RemoveBullet()
     {
         if (gunBullet == null)
         {
@@ -30,7 +31,7 @@ public class GunBulletChamber : MonoBehaviour
             return;
         }
 
-        gunBullet = null;
+        this.gunBullet = null;
         Debug.Log($"Gun Bullet Chamber: bullet removed from gun bullet chamber {gameObject.name}.");
     }
 }
