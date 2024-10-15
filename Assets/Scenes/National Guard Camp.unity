@@ -77759,16 +77759,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2113243385894710133, guid: 1e6003d052b9e2b4a9101a3236ffad65,
-        type: 3}
-      propertyPath: m_InteractionManager
-      value: 
-      objectReference: {fileID: 348845610}
-    - target: {fileID: 3836199715970667557, guid: 1e6003d052b9e2b4a9101a3236ffad65,
-        type: 3}
-      propertyPath: m_InteractionManager
-      value: 
-      objectReference: {fileID: 348845610}
     - target: {fileID: 4388137895540145532, guid: 1e6003d052b9e2b4a9101a3236ffad65,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -77819,17 +77809,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
-    - target: {fileID: 4790836628150650072, guid: 1e6003d052b9e2b4a9101a3236ffad65,
-        type: 3}
-      propertyPath: m_InteractionManager
-      value: 
-      objectReference: {fileID: 348845610}
     - target: {fileID: 5140557467092470367, guid: 1e6003d052b9e2b4a9101a3236ffad65,
-        type: 3}
-      propertyPath: m_InteractionManager
-      value: 
-      objectReference: {fileID: 348845610}
-    - target: {fileID: 5559314084915515124, guid: 1e6003d052b9e2b4a9101a3236ffad65,
         type: 3}
       propertyPath: m_InteractionManager
       value: 
@@ -77849,16 +77829,6 @@ PrefabInstance:
       propertyPath: rightInteractorTransform
       value: 
       objectReference: {fileID: 1599013805}
-    - target: {fileID: 7938131094442738295, guid: 1e6003d052b9e2b4a9101a3236ffad65,
-        type: 3}
-      propertyPath: m_InteractionManager
-      value: 
-      objectReference: {fileID: 348845610}
-    - target: {fileID: 9210855097918674640, guid: 1e6003d052b9e2b4a9101a3236ffad65,
-        type: 3}
-      propertyPath: m_InteractionManager
-      value: 
-      objectReference: {fileID: 348845610}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

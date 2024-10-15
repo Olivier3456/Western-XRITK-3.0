@@ -1,47 +1,36 @@
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class GunBulletChamber : MonoBehaviour
 {
-    private XRSocketInteractor xRSocketInteractor;
-
-    public bool hasSelection => xRSocketInteractor.hasSelection;
+    private GunBullet gunBullet = null;
 
     public GunBullet GunBullet
     {
-        get
+        get => gunBullet;
+    }
+
+    public void AddBullet(GunBullet gunBullet)
+    {
+        if (this.gunBullet != null)
         {
-            if (!xRSocketInteractor.hasSelection)
-            {
-                return null;
-            }
-
-            return xRSocketInteractor.interactablesSelected[0].transform.GetComponent<GunBullet>();
-        }
-    }
-
-
-    private void Awake()
-    {
-        xRSocketInteractor = GetComponent<XRSocketInteractor>();
-    }
-
-    public void EnableSocketInteractor()
-    {
-        xRSocketInteractor.socketActive = true;
-    }
-
-    public void DisableSocketInteractor(bool onlyIfEmpty)
-    {
-        if (!onlyIfEmpty)
-        {
-            xRSocketInteractor.socketActive = false;
+            Debug.LogError($"Can't add a bullet in gun bullet chamber {gameObject.name}: there is already a bullet in it!");
             return;
         }
 
-        if (!xRSocketInteractor.hasSelection)
+        this.gunBullet = gunBullet;
+
+        Debug.Log("Gun Bullet Chamber: bullet addded.");
+    }
+
+    public void RemoveBullet(GunBullet gunBullet)
+    {
+        if (gunBullet == null)
         {
-            xRSocketInteractor.socketActive = false;
+            Debug.LogWarning($"Can't remove a bullet from gun bullet chamber {gameObject.name}: it is already empty.");
+            return;
         }
+
+        gunBullet = null;
+        Debug.Log($"Gun Bullet Chamber: bullet removed from gun bullet chamber {gameObject.name}.");
     }
 }

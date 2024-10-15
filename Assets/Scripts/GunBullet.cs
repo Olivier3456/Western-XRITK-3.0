@@ -46,4 +46,9 @@ public class GunBullet : MonoBehaviour
         bulletCollider.enabled = false;  // for now, idk how to disable "grabbable" property in XRGrabInteractable without making the bullet falling out of its socket interactor
         //xrGrabInteractable.interactionLayers = interactionLayerMask_NoInteractions;
     }
+
+    public void SetRigidbodyKinematic(bool isKinematic)
+    {
+        rb.isKinematic = isKinematic;
+    }
 }

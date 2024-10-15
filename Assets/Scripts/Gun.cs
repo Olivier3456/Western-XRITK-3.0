@@ -112,7 +112,7 @@ public class Gun : MonoBehaviour
 
                 isBarrelOut = false;
 
-                DisableBulletsGrabbable(); // bullets CAN'T be grabbed by player when the barrel is locked
+                //DisableBulletsGrabbable(); // bullets CAN'T be grabbed by player when the barrel is locked - No need here anymore: it is already disabled by GunBarrel when a bullet arrives to its chamber.
                 bool onlyEmptyOnes = true;
                 DisableGunBulletChambersSocketInteractors(onlyEmptyOnes); // bullets can't be put in gun barrel chambers when the barrel is locked, but socket interactors with bullets in it stay active
             }
@@ -143,18 +143,18 @@ public class Gun : MonoBehaviour
 
     private void EnableGunBulletChambersSocketInteractors()
     {
-        foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
-        {
-            gunBulletChamber.EnableSocketInteractor();
-        }
+        //foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
+        //{
+        //    gunBulletChamber.EnableSocketInteractor();
+        //}
     }
 
     private void DisableGunBulletChambersSocketInteractors(bool onlyEmptyOnes)
     {
-        foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
-        {
-            gunBulletChamber.DisableSocketInteractor(onlyEmptyOnes);
-        }
+        //foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
+        //{
+        //    gunBulletChamber.DisableSocketInteractor(onlyEmptyOnes);
+        //}
     }
 
 
