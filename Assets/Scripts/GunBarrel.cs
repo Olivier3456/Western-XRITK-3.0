@@ -6,15 +6,12 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class GunBarrel : MonoBehaviour
 {
+    [SerializeField] private Gun gun;
+
+
     [SerializeField] private GunBulletChamber[] gunBulletChambers;
     [SerializeField] private LayerMask bulletLayerMask;
-
-
-    //private int firstFoundFreeBulletChamber;
-
-    //private GunBullet bulletMovingToChamber;
-
-
+    
     [SerializeField] private float bulletSnapMoveSpeed = 5f;
     [SerializeField] private float bulletSnapRotationSpeed = 5f;
 
@@ -22,14 +19,14 @@ public class GunBarrel : MonoBehaviour
 
     [SerializeField] private Collider bulletsDetectionTriggerCollider;
 
-    //private bool isMovingBullet;
-
 
     private void OnTriggerEnter(Collider other)
     {
         if (((1 << other.gameObject.layer) & bulletLayerMask) == 0) return;
 
-        // We want to know when this bullet will be dropped by player:
+        if (other.gameObject.GetComponent<GunBullet>().isInGun) return;
+
+        // we want to know when this bullet will be dropped by player:
         XRGrabInteractable bulletGrabInteractable = other.gameObject.GetComponent<XRGrabInteractable>();
         bulletGrabInteractable.selectExited.AddListener(BulletGrabInteractable_selectExited);
 
@@ -94,6 +91,39 @@ public class GunBarrel : MonoBehaviour
     }
 
 
+    public IEnumerator BulletsExpulsionCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+
+        bool areBulletsOut = false;
+
+        while (!areBulletsOut && gun.IsBarrelOut)
+        {
+            yield return null;
+
+            Vector3 barrelCurrentForward = transform.forward;
+            float verticalDot = Vector3.Dot(barrelCurrentForward, Vector3.up);
+
+            float dotThreshold = 0.8f;
+            if (verticalDot > dotThreshold) // the revolver is facing up
+            {
+                areBulletsOut = true;
+
+                foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
+                {
+                    if (gunBulletChamber.GunBullet != null)
+                    {
+                        gunBulletChamber.GunBullet.ExpulsionFromGunBarrel(barrelCurrentForward);
+                        gunBulletChamber.GunBullet.EnableCollider();
+                        gunBulletChamber.GunBullet.transform.parent = null;
+                        gunBulletChamber.RemoveBullet();
+                    }
+                }
+            }
+        }
+    }
+
+
     private int FindEmptyChamber()
     {
         int firstFoundFreeBulletChamber = -1;
@@ -116,8 +146,30 @@ public class GunBarrel : MonoBehaviour
         bulletsDetectionTriggerCollider.enabled = false;
     }
 
-    public void EnableBulletDetectionCollider()
+    public void EnableBarrelBulletDetectionCollider()
     {
         bulletsDetectionTriggerCollider.enabled = true;
+    }
+
+    public void EnableBulletsGrabbable()
+    {
+        foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
+        {
+            if (gunBulletChamber.GunBullet != null)
+            {
+                gunBulletChamber.GunBullet.EnableCollider();
+            }
+        }
+    }
+
+    public void DisableBulletsGrabbable()
+    {
+        foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
+        {
+            if (gunBulletChamber.GunBullet != null)
+            {
+                gunBulletChamber.GunBullet.DisableCollider();
+            }
+        }
     }
 }

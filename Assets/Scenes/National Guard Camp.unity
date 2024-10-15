@@ -77814,21 +77814,11 @@ PrefabInstance:
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 348845610}
-    - target: {fileID: 5532291177973183901, guid: 1e6003d052b9e2b4a9101a3236ffad65,
-        type: 3}
-      propertyPath: bulletsDetectionTriggerCollider
-      value: 
-      objectReference: {fileID: 5823898512153622488}
     - target: {fileID: 6447915886053702619, guid: 1e6003d052b9e2b4a9101a3236ffad65,
         type: 3}
       propertyPath: m_Name
       value: Revolver With Hinge Joint Hammer With Bullet Sockets
       objectReference: {fileID: 0}
-    - target: {fileID: 7337214239945229802, guid: 1e6003d052b9e2b4a9101a3236ffad65,
-        type: 3}
-      propertyPath: gunBarrel
-      value: 
-      objectReference: {fileID: 5823898512153622487}
     - target: {fileID: 7337214239945229802, guid: 1e6003d052b9e2b4a9101a3236ffad65,
         type: 3}
       propertyPath: leftInteractorTransform
@@ -77856,24 +77846,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f264bbe21b0cc0d47bda834621871f1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5823898512153622487 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5532291177973183901, guid: 1e6003d052b9e2b4a9101a3236ffad65,
-    type: 3}
-  m_PrefabInstance: {fileID: 5823898512153622485}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff7001933d4e8854986e35abaf31f852, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!136 &5823898512153622488 stripped
-CapsuleCollider:
-  m_CorrespondingSourceObject: {fileID: 666188572561249674, guid: 1e6003d052b9e2b4a9101a3236ffad65,
-    type: 3}
-  m_PrefabInstance: {fileID: 5823898512153622485}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
