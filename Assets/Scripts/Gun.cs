@@ -89,8 +89,8 @@ public class Gun : MonoBehaviour
         audioSource.clip = barrelOutAudioClip;
         audioSource.Play();
 
-        gunBarrel.EnableBulletsGrabbable(); // bullets CAN be grabbed by player when the barrel is unlocked
-        gunBarrel.EnableBarrelBulletDetectionCollider(); // bullets CAN be added to gun barrel chambers when the barrel is unlocked
+        //gunBarrel.EnableBulletsGrabbable(); // bullets CAN be grabbed by player when the barrel is unlocked
+        //gunBarrel.EnableBarrelBulletDetectionCollider(); // bullets CAN be added to gun barrel chambers when the barrel is unlocked
 
         while (isBarrelOut)
         {
@@ -113,7 +113,7 @@ public class Gun : MonoBehaviour
 
                 isBarrelOut = false;
 
-                gunBarrel.DisableBulletsGrabbable(); // bullets can NOT be grabbed by player when the barrel is locked
+                //gunBarrel.DisableBulletsGrabbable(); // bullets can NOT be grabbed by player when the barrel is locked
                 gunBarrel.DisableBarrelBulletDetectionCollider(); // bullets can NOT be added to gun barrel chambers when the barrel is locked
             }
         }

@@ -14,7 +14,10 @@ public class GunBullet : MonoBehaviour
 
     private XRGrabInteractable xrGrabInteractable;
 
-    public bool isInGun = false;
+    //public bool isInGun = false;
+
+    public GunBulletChamber GunBulletChamber => gunBulletChamber;
+    private GunBulletChamber gunBulletChamber = null;
 
     private void Awake()
     {
@@ -26,7 +29,7 @@ public class GunBullet : MonoBehaviour
     public void ExpulsionFromGunBarrel(Vector3 gunCurrentForward)
     {
         rb.isKinematic = false;
-        isInGun = false;
+        gunBulletChamber = null;
 
         float expulsionForce = 1f;
         rb.AddForce(-gunCurrentForward * expulsionForce, ForceMode.Impulse);
@@ -51,5 +54,10 @@ public class GunBullet : MonoBehaviour
     public void SetRigidbodyKinematic(bool isKinematic)
     {
         rb.isKinematic = isKinematic;
+    }
+
+    public void SetGunBulletChamber(GunBulletChamber gunBulletChamber)
+    {
+        this.gunBulletChamber = gunBulletChamber;
     }
 }

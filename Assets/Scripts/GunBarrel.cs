@@ -11,7 +11,7 @@ public class GunBarrel : MonoBehaviour
 
     [SerializeField] private GunBulletChamber[] gunBulletChambers;
     [SerializeField] private LayerMask bulletLayerMask;
-    
+
     [SerializeField] private float bulletSnapMoveSpeed = 5f;
     [SerializeField] private float bulletSnapRotationSpeed = 5f;
 
@@ -20,11 +20,14 @@ public class GunBarrel : MonoBehaviour
     [SerializeField] private Collider bulletsDetectionTriggerCollider;
 
 
+    private WaitForSeconds waitOneSec = new WaitForSeconds(1f);
+
+
     private void OnTriggerEnter(Collider other)
     {
         if (((1 << other.gameObject.layer) & bulletLayerMask) == 0) return;
 
-        if (other.gameObject.GetComponent<GunBullet>().isInGun) return;
+        if (other.gameObject.GetComponent<GunBullet>().GunBulletChamber != null) return;
 
         // we want to know when this bullet will be dropped by player:
         XRGrabInteractable bulletGrabInteractable = other.gameObject.GetComponent<XRGrabInteractable>();
@@ -47,11 +50,12 @@ public class GunBarrel : MonoBehaviour
     }
 
 
-    private void BulletGrabInteractable_selectExited(SelectExitEventArgs args)
+    private void BulletGrabInteractable_selectExited(SelectExitEventArgs args)      // only for bullets which are in the barrel proximity trigger
     {
         GunBullet gunBullet = args.interactableObject.transform.GetComponent<GunBullet>();
         StartCoroutine(MoveBulletToChamberCoroutine(gunBullet, FindEmptyChamber()));
     }
+
 
 
     private IEnumerator MoveBulletToChamberCoroutine(GunBullet gunBullet, int chamberId)
@@ -93,7 +97,23 @@ public class GunBarrel : MonoBehaviour
 
     public IEnumerator BulletsExpulsionCoroutine()
     {
-        yield return new WaitForSeconds(1f);
+        yield return waitOneSec;
+
+        bool hasBullet = false;
+        foreach (GunBulletChamber chamber in gunBulletChambers)
+        {
+            if (chamber.GunBullet != null)
+            {
+                hasBullet = true;
+                break;
+            }
+        }
+        if (!hasBullet) // no bullet in barrel: no need to continue the coroutine
+        {
+            EnableBarrelBulletDetectionCollider();
+            yield break;
+        }
+
 
         bool areBulletsOut = false;
 
@@ -121,6 +141,10 @@ public class GunBarrel : MonoBehaviour
                 }
             }
         }
+
+        // we wait a little to give the time to the falling bullets to exit the gun barrel bullet detection trigger before re-enabling it:
+        yield return waitOneSec;
+        EnableBarrelBulletDetectionCollider();
     }
 
 
