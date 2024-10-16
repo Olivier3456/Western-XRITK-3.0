@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class GunBulletChamber : MonoBehaviour
 {
+    public MeshRenderer BulletPlacementRenderer => bulletPlacementRenderer;
+    [SerializeField] private MeshRenderer bulletPlacementRenderer;
+
+
     private GunBullet gunBullet = null;
 
     public GunBullet GunBullet
@@ -35,4 +39,10 @@ public class GunBulletChamber : MonoBehaviour
         this.gunBullet = null;
         Debug.Log($"Gun Bullet Chamber: bullet removed from gun bullet chamber {gameObject.name}.");
     }
+
+
+
+
+    public void ShowBulletPlacementVisual() => bulletPlacementRenderer.enabled = true;
+    public void HideBulletPlacementVisual() => bulletPlacementRenderer.enabled = false;
 }

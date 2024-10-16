@@ -33,7 +33,12 @@ public class GunBarrel : MonoBehaviour
         XRGrabInteractable bulletGrabInteractable = other.gameObject.GetComponent<XRGrabInteractable>();
         bulletGrabInteractable.selectExited.AddListener(BulletGrabInteractable_selectExited);
 
-        validChamberVisualDebugObject.SetActive(FindEmptyChamber() >= 0);
+
+        int emptyChamberFound = FindEmptyChamber();
+        if (emptyChamberFound >= 0)
+        {
+            ShowBulletPlacementVisual(emptyChamberFound);
+        }
     }
 
 
@@ -42,13 +47,14 @@ public class GunBarrel : MonoBehaviour
     {
         if (((1 << other.gameObject.layer) & bulletLayerMask) == 0) return; // Not the good layer.
 
-        validChamberVisualDebugObject.SetActive(false);
+        HideAllBulletChambersVisual();
 
         // No need to know anymore when this bullet is dropped by player:
         XRGrabInteractable bulletGrabInteractable = other.gameObject.GetComponent<XRGrabInteractable>();
         bulletGrabInteractable.selectExited.RemoveListener(BulletGrabInteractable_selectExited);
     }
 
+    
 
     private void BulletGrabInteractable_selectExited(SelectExitEventArgs args)      // only for bullets which are in the barrel proximity trigger
     {
@@ -71,7 +77,7 @@ public class GunBarrel : MonoBehaviour
         gunBullet.SetRigidbodyKinematic(true);
         gunBullet.DisableCollider();
 
-        validChamberVisualDebugObject.SetActive(false);
+        HideAllBulletChambersVisual();
 
         Transform bulletTransform = gunBullet.transform;
         Transform chamberTransform = gunBulletChambers[chamberId].transform;
@@ -194,6 +200,16 @@ public class GunBarrel : MonoBehaviour
             {
                 gunBulletChamber.GunBullet.DisableCollider();
             }
+        }
+    }
+
+    private void ShowBulletPlacementVisual(int bulletChamberId) => gunBulletChambers[bulletChamberId].ShowBulletPlacementVisual();
+
+    private void HideAllBulletChambersVisual()
+    {
+        foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
+        {
+            gunBulletChamber.HideBulletPlacementVisual();
         }
     }
 }
