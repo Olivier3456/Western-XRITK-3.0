@@ -31,8 +31,6 @@ public class Gun : MonoBehaviour
     [SerializeField] private Transform barrelRotationTransform;
     [SerializeField] private AnimationCurve barrelRotationSpeedCurve;
 
-    [SerializeField] private GunBulletChamber[] gunBulletChambers;
-
     [SerializeField] private Collider hammerCollider;
 
     [SerializeField] private GunBarrel gunBarrel;
@@ -179,12 +177,12 @@ public class Gun : MonoBehaviour
 
         Debug.Log("Shot is going to be fired. Bullet hole facing canon: " + bulletChamberFacingCanon);
 
-        bool isValidBullet = gunBulletChambers[bulletChamberFacingCanon].GunBullet != null && !gunBulletChambers[bulletChamberFacingCanon].GunBullet.HasBeenShot;
+        bool isValidBullet = gunBarrel.GunBulletChambers[bulletChamberFacingCanon].GunBullet != null && !gunBarrel.GunBulletChambers[bulletChamberFacingCanon].GunBullet.HasBeenShot;
 
 
         if (isValidBullet)
         {
-            gunBulletChambers[bulletChamberFacingCanon].GunBullet.Shoot();
+            gunBarrel.GunBulletChambers[bulletChamberFacingCanon].GunBullet.Shoot();
             float shotAnimSpeed = 2.5f;
             animator.SetFloat("ShotAnimSpeed", shotAnimSpeed);
             animator.SetTrigger("Shoot");

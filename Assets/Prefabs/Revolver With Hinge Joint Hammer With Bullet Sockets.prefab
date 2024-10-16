@@ -1528,13 +1528,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  gunBulletChambers:
-  - {fileID: 4871310345121604028}
-  - {fileID: 8573211439726517446}
-  - {fileID: 2326779729018720545}
-  - {fileID: 6139255346254062265}
-  - {fileID: 2401463108434992235}
-  - {fileID: 8225443315578089482}
   hammerCollider: {fileID: 1001907040167982294}
   gunBarrel: {fileID: 5532291177973183901}
 --- !u!82 &7788812153962959116

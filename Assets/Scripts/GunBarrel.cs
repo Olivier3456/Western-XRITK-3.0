@@ -8,8 +8,9 @@ public class GunBarrel : MonoBehaviour
 {
     [SerializeField] private Gun gun;
 
-
+    public GunBulletChamber[] GunBulletChambers => gunBulletChambers;
     [SerializeField] private GunBulletChamber[] gunBulletChambers;
+
     [SerializeField] private LayerMask bulletLayerMask;
 
     [SerializeField] private float bulletSnapMoveSpeed = 5f;
@@ -54,7 +55,7 @@ public class GunBarrel : MonoBehaviour
         bulletGrabInteractable.selectExited.RemoveListener(BulletGrabInteractable_selectExited);
     }
 
-    
+
 
     private void BulletGrabInteractable_selectExited(SelectExitEventArgs args)      // only for bullets which are in the barrel proximity trigger
     {
