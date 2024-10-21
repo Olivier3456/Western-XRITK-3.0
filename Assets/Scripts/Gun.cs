@@ -176,7 +176,7 @@ public class Gun : MonoBehaviour
             HapticsUtility.SendHapticImpulse(1, 0.1f, HapticsUtility.Controller.Right);
         }
 
-        Debug.Log("Shot is going to be fired. Bullet hole facing canon: " + bulletChamberFacingCanon);
+        //Debug.Log("Shot is going to be fired. Bullet hole facing canon: " + bulletChamberFacingCanon);
 
         bool isValidBullet = gunBarrel.GunBulletChambers[bulletChamberFacingCanon].GunBullet != null && !gunBarrel.GunBulletChambers[bulletChamberFacingCanon].GunBullet.HasBeenShot;
 
@@ -225,6 +225,7 @@ public class Gun : MonoBehaviour
     }
 
 
+#region Inputs
     private void PrimaryAction_Started(InputAction.CallbackContext obj) // ejecting barrel for reloading
     {
         if (isBarrelOut) return;
@@ -283,4 +284,5 @@ public class Gun : MonoBehaviour
 
         OnGunDropped?.Invoke(this, EventArgs.Empty);
     }
+    #endregion
 }

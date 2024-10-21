@@ -62657,9 +62657,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1883230248363655243, guid: f6336ac4ac8b4d34bc5072418cdc62a0,
         type: 3}
+      propertyPath: m_EnableFarCasting
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1883230248363655243, guid: f6336ac4ac8b4d34bc5072418cdc62a0,
+        type: 3}
       propertyPath: m_InteractionManager
       value: 
       objectReference: {fileID: 348845610}
+    - target: {fileID: 8877177980677234388, guid: f6336ac4ac8b4d34bc5072418cdc62a0,
+        type: 3}
+      propertyPath: m_EnableFarCasting
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8877177980677234388, guid: f6336ac4ac8b4d34bc5072418cdc62a0,
         type: 3}
       propertyPath: m_InteractionManager
@@ -77759,6 +77769,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 666188572561249674, guid: 1e6003d052b9e2b4a9101a3236ffad65,
+        type: 3}
+      propertyPath: m_Height
+      value: 0.097722024
+      objectReference: {fileID: 0}
+    - target: {fileID: 666188572561249674, guid: 1e6003d052b9e2b4a9101a3236ffad65,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 666188572561249674, guid: 1e6003d052b9e2b4a9101a3236ffad65,
+        type: 3}
+      propertyPath: m_Center.y
+      value: -0.00000010029454
+      objectReference: {fileID: 0}
+    - target: {fileID: 666188572561249674, guid: 1e6003d052b9e2b4a9101a3236ffad65,
+        type: 3}
+      propertyPath: m_Center.z
+      value: -0.04032784
+      objectReference: {fileID: 0}
     - target: {fileID: 4388137895540145532, guid: 1e6003d052b9e2b4a9101a3236ffad65,
         type: 3}
       propertyPath: m_LocalPosition.x
