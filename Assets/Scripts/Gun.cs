@@ -37,12 +37,12 @@ public class Gun : MonoBehaviour
 
     public event EventHandler OnShoot;
 
-    public event EventHandler OnGunGrabbed;
-    public event EventHandler OnGunDropped;
+    public event EventHandler<CurrentController> OnGunGrabbed;
+    public event EventHandler<CurrentController> OnGunDropped;
 
 
 
-    private enum CurrentController { None, Left, Right }
+    public enum CurrentController { None, Left, Right }
     private CurrentController currentController;
 
     private bool shotDone;
@@ -258,7 +258,7 @@ public class Gun : MonoBehaviour
 
         hammerCollider.enabled = true;
 
-        OnGunGrabbed?.Invoke(this, EventArgs.Empty);
+        OnGunGrabbed?.Invoke(this, currentController);
     }
 
     private void XRGrabInteractable_SelectExited(SelectExitEventArgs args)
@@ -278,11 +278,11 @@ public class Gun : MonoBehaviour
             rightPrimaryAction.action.started -= PrimaryAction_Started;
         }
 
+        OnGunDropped?.Invoke(this, currentController);
+        
         currentController = CurrentController.None;
 
         hammerCollider.enabled = false;
-
-        OnGunDropped?.Invoke(this, EventArgs.Empty);
     }
     #endregion
 }

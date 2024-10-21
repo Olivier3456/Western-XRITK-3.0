@@ -14,13 +14,13 @@ public class GunAnchor : MonoBehaviour
     private bool isGunGrabbed;
     private bool isGunAnchored;
 
-    private void Gun_OnGunGrabbed(object obj, EventArgs args)
+    private void Gun_OnGunGrabbed(object obj, Gun.CurrentController currentController)
     {
         isGunGrabbed = true;
         isGunAnchored = false;
     }
 
-    private void Gun_OnGunDropped(object obj, EventArgs args)
+    private void Gun_OnGunDropped(object obj, Gun.CurrentController currentController)
     {
         isGunGrabbed = false;
         isGunAnchored = false;
