@@ -106,6 +106,8 @@ public class GunBarrel : MonoBehaviour
     {
         yield return waitOneSec;
 
+        EnableBarrelBulletDetectionCollider();
+
         bool hasBullet = false;
         foreach (GunBulletChamber chamber in gunBulletChambers)
         {
@@ -117,7 +119,6 @@ public class GunBarrel : MonoBehaviour
         }
         if (!hasBullet) // no bullet in barrel: no need to continue the coroutine
         {
-            EnableBarrelBulletDetectionCollider();
             yield break;
         }
 
@@ -135,6 +136,7 @@ public class GunBarrel : MonoBehaviour
             if (verticalDot > dotThreshold) // the revolver is facing up
             {
                 areBulletsOut = true;
+                DisableBarrelBulletDetectionCollider(); // avoid bullets detection when bullets falling
 
                 foreach (GunBulletChamber gunBulletChamber in gunBulletChambers)
                 {
