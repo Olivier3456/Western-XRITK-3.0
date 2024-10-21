@@ -149,7 +149,7 @@ public class GunBarrel : MonoBehaviour
             }
         }
 
-        // we wait a little to give the time to the falling bullets to exit the gun barrel bullet detection trigger before re-enabling it:
+        // wait a little to give enough time to the falling bullets to exit the gun barrel bullet detection trigger before re-enabling it:
         yield return waitOneSec;
         EnableBarrelBulletDetectionCollider();
     }
@@ -159,12 +159,26 @@ public class GunBarrel : MonoBehaviour
     {
         int firstFoundFreeBulletChamber = -1;
 
-        for (int i = 0; i < gunBulletChambers.Length; i++)
+        // first search: starting to bullet chamber facing canon
+        for (int i = gun.BulletChamberFacingCanon; i < gunBulletChambers.Length; i++)
         {
             if (gunBulletChambers[i].GunBullet == null)
             {
                 firstFoundFreeBulletChamber = i;
                 break;
+            }
+        }
+
+        // if no empty chamber found: second search, starting to the beginning of the array
+        if (firstFoundFreeBulletChamber < 0)
+        {
+            for (int i = 0; i < gun.BulletChamberFacingCanon; i++)
+            {
+                if (gunBulletChambers[i].GunBullet == null)
+                {
+                    firstFoundFreeBulletChamber = i;
+                    break;
+                }
             }
         }
 

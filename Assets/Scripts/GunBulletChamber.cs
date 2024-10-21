@@ -37,7 +37,7 @@ public class GunBulletChamber : MonoBehaviour
 
         this.gunBullet.SetGunBulletChamber(null);
         this.gunBullet = null;
-        Debug.Log($"Gun Bullet Chamber: bullet removed from gun bullet chamber {gameObject.name}.");
+        //Debug.Log($"Gun Bullet Chamber: bullet removed from gun bullet chamber: {gameObject.name}.");
     }
 
 

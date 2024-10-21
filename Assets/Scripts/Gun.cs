@@ -55,6 +55,7 @@ public class Gun : MonoBehaviour
     private bool isHammerArmed;
 
     private int bulletChamberFacingCanon = 0;
+    public int BulletChamberFacingCanon => bulletChamberFacingCanon;
 
 
     private void Start()
