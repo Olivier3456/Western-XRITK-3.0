@@ -77520,6 +77520,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Revolver With Hinge Joint Hammer With Bullet Sockets
       objectReference: {fileID: 0}
+    - target: {fileID: 6908964420132769203, guid: 1e6003d052b9e2b4a9101a3236ffad65,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7337214239945229802, guid: 1e6003d052b9e2b4a9101a3236ffad65,
         type: 3}
       propertyPath: leftInteractorTransform
@@ -77530,6 +77535,11 @@ PrefabInstance:
       propertyPath: rightInteractorTransform
       value: 
       objectReference: {fileID: 1599013805}
+    - target: {fileID: 7372181115911356095, guid: 1e6003d052b9e2b4a9101a3236ffad65,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
